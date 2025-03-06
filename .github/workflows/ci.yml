@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      # Backend Install & Test
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm install
+
+      - name: Lint backend
+        run: |
+          cd backend
+          npx eslint . --ext .js
+
+      # 如有測試檔可執行 npm test
+      - name: Test backend
+        run: |
+          cd backend
+          npm test
+
+      # Frontend Install & Test
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Lint frontend
+        run: |
+          cd frontend
+          npx eslint src --ext .js,.jsx
+
+      # 如有測試檔可執行 npm test
+      - name: Test frontend
+        run: |
+          cd frontend
+          npm test
